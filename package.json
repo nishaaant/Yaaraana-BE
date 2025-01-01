@@ -1,0 +1,21 @@
+{
+  "name": "yaaraana-be",
+  "version": "1.0.0",
+  "description": "project as a socialising app by MERN - NR",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node src/App.js"
+  },
+  "keywords": [
+    "node",
+    "javascript",
+    "express",
+    "nodemon",
+    "backend"
+  ],
+  "author": "Nishant Rajput",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
