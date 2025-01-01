@@ -4,7 +4,8 @@ const app = express();
 
 
 
-app.get("/test" , (req,res) => {
+app.get("/test/:userID/:name/:password" , (req,res) => {
+    console.log(req.params)
     res.send("got it!!");
 });
 app.post("/test" , (req,res) => {
