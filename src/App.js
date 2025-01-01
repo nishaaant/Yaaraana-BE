@@ -2,16 +2,26 @@ const express = require("express");
 
 const app = express();
 
-// app.use("/", (req,res) => {
-//     res.send("hello")
-// });
-app.use("/surname" , (req,res) => {
-    res.send("Rajput")
+
+
+app.get("/test" , (req,res) => {
+    res.send("got it!!");
 });
-app.use("/college" , (req,res) => {
-    res.send("Gautam Buddha University")
+app.post("/test" , (req,res) => {
+    res.send("posted it!!");
+});
+app.delete("/test" , (req,res) => {
+    res.send("Deleted it!!");
 });
 
-app.listen(1608 , () => {
-    console.log("Server ran succesfully...")
+
+app.use("/college" , (req,res) => {
+    res.send("Gautam Buddha University");
+});
+
+app.use("/", (req,res) => {
+    res.send("hello");
+});
+app.listen(9999 , () => {
+    console.log("Server ran succesfully...");
 });
