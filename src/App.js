@@ -20,7 +20,7 @@ app.get("/user", async (req,res) => {
         }
     }
     catch(err) {
-        res.status(400).send("Error Faced")
+        res.status(400).send(err.message)
     }
 })
 
@@ -35,7 +35,7 @@ app.get("/feed", async (req,res) => {
         }
     }
     catch(err) {
-        res.status(400).send("Error Faced")
+        res.status(400).send(err.message)
     }
 })
 
@@ -48,7 +48,7 @@ app.post("/signup", async (req,res) => {
         res.send("User added Succesfully")
     }
     catch(err) {
-        res.status(400).send("Error Faced")
+        res.status(400).send(err.message)
     }
 })
 
@@ -60,21 +60,26 @@ app.delete("/user", async (req, res) => {
         res.send("Deleted the user succesfully");
     }
     catch(err) {
-        res.status(400).send("Error Faced")
+        res.status(400).send(err.message)
     }
 
 })
 
 //update the data
-app.patch("/user", async (req,res) => {
-    const userId = req.body._id;
+app.patch("/user/:userId", async (req,res) => {
+    const userId = req.params?.userId;
     const data = req.body;
     try{
-        await User.findByIdAndUpdate(userId, data , {returnDocument:'before'});
+        const ALLOWED_UPDATES =["firstName","middleName", "lastName", "password", "age", "gender", "location", "about", "photo", "skills"];
+        const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATES.includes(k));
+        if(!isUpdateAllowed){throw new Error("Update Not ALLOwed");}
+        if(data?.skills.length > 10){throw new Error("Skills cannot be more than 10");}
+        const user = await User.findByIdAndUpdate(userId, data , {returnDocument:'before',runValidators:true});
+        console.log(user)
         res.send("Updated the user succesfully");
     }
     catch(err) {
-        res.status(400).send("Error Faced")
+        res.status(400).send(err.message)
     }
 })
 
