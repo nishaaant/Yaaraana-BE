@@ -5,19 +5,18 @@ const User = require("./models/user")
 
 const app = express();
 
-app.post("/signup", (req,res) => {
-    const user = new User({
-        firstName : "Shobhit",
-        lastName : "Yadav",
-        emailID : "Shobhit@Yadav123",
-        password : "1409",
-        age : 23,
-        gender : "Male",
-        location : "Vasundhra"
-    })
+app.use(express.json());
 
-    user.save()
-    res.send("User added Succesfully")
+app.post("/signup", async (req,res) => {
+    const user = new User(req.body)
+
+    try{
+        await user.save()
+        res.send("User added Succesfully")
+    }
+    catch(err) {
+        res.status(400).send("Error Faced")
+    }
 })
 
 // connecting database.js where connected the cluster after that only express will recieve API requests 
