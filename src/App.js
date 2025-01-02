@@ -2,24 +2,38 @@ const express = require("express");
 
 const app = express();
 
-app.use(
-    "/test" ,
-    (req,res,next) => {
-        console.log("1");
-    // res.send("posted it!!1");
+const {authAdmin,authUser} = require("./middlewares/auth")
+
+//Admin auths
+app.use("/admin", authAdmin);
+
+app.get("/admin/getAllData", (req, res, next) => {
+    res.send("Got all data");
     next();
-},
-(req,res,next) => {
-    console.log("2");
-    // res.send("posted it!!2");
+})
+
+app.get("/admin/deleteAllData", (req, res, next) => {
+    res.send("Deleted all data");
     next();
-},
-(req,res,next) => {
-    console.log("3");
-    res.send("posted it!!3");
+})
+
+
+//user Auths
+app.get("/user/login", (req, res, next) => {
+    res.send(" Logged in ");
+})
+
+app.use("/user", authUser);
+
+app.get("/user/getAllData", (req, res, next) => {
+    res.send("Got all data");
     next();
-}
-);
+})
+
+app.get("/user/deleteAllData", (req, res, next) => {
+    res.send("Deleted all data");
+    next();
+})
 
 
 app.listen(9999 , () => {
