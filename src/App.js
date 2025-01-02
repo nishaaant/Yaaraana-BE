@@ -2,39 +2,27 @@ const express = require("express");
 
 const app = express();
 
-const {authAdmin,authUser} = require("./middlewares/auth")
+//Error Handling
 
-//Admin auths
-app.use("/admin", authAdmin);
-
-app.get("/admin/getAllData", (req, res, next) => {
-    res.send("Got all data");
-    next();
+//by try and catch
+app.use("/getNishant", (req,res,next) => {
+    try{
+    console.log("Mahaan Nishant");
+    throw new Error;
+    res.send("success");
+}
+catch(err){
+    res.status(404).send("catch Error")
+}
 })
 
-app.get("/admin/deleteAllData", (req, res, next) => {
-    res.send("Deleted all data");
-    next();
+//by own
+//order of middleware param matters
+app.use("/", (err , req, res, next) => {
+    if(err){
+        res.status(506).send("Errooorr!")
+    }
 })
-
-
-//user Auths
-app.get("/user/login", (req, res, next) => {
-    res.send(" Logged in ");
-})
-
-app.use("/user", authUser);
-
-app.get("/user/getAllData", (req, res, next) => {
-    res.send("Got all data");
-    next();
-})
-
-app.get("/user/deleteAllData", (req, res, next) => {
-    res.send("Deleted all data");
-    next();
-})
-
 
 app.listen(9999 , () => {
     console.log("Server ran succesfully...");
