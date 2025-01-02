@@ -4,7 +4,7 @@
   "description": "project as a socialising app by MERN - NR",
   "main": "index.js",
   "scripts": {
-    "start" : "node src/App.js"
+    "start": "node src/App.js"
   },
   "keywords": [
     "node",
@@ -16,6 +16,7 @@
   "author": "Nishant Rajput",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongoose": "^8.9.3"
   }
 }

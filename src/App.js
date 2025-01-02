@@ -1,29 +1,33 @@
+//importing express and mongoose
 const express = require("express");
+const connectDB = require("./config/database");
+const User = require("./models/user")
 
 const app = express();
 
-//Error Handling
+app.post("/signup", (req,res) => {
+    const user = new User({
+        firstName : "Shobhit",
+        lastName : "Yadav",
+        emailID : "Shobhit@Yadav123",
+        password : "1409",
+        age : 23,
+        gender : "Male",
+        location : "Vasundhra"
+    })
 
-//by try and catch
-app.use("/getNishant", (req,res,next) => {
-    try{
-    console.log("Mahaan Nishant");
-    throw new Error;
-    res.send("success");
-}
-catch(err){
-    res.status(404).send("catch Error")
-}
+    user.save()
+    res.send("User added Succesfully")
 })
 
-//by own
-//order of middleware param matters
-app.use("/", (err , req, res, next) => {
-    if(err){
-        res.status(506).send("Errooorr!")
-    }
+// connecting database.js where connected the cluster after that only express will recieve API requests 
+// thats why wrote listen in the connect codee - Nishant
+connectDB().then(()=> {
+    console.log("Database connected!!")
+    app.listen(9999 , () => {
+        console.log("Server ran succesfully...");
+    });
+}).catch((err)=> {
+    console.log("Database not connected!!")
 })
 
-app.listen(9999 , () => {
-    console.log("Server ran succesfully...");
-});
