@@ -9,9 +9,10 @@ app.use(express.json());
 
 //get data by user id
 app.get("/user", async (req,res) => {
-    const userID = req.body._id;
+    const userloc = req.body.location;
+    console.log(userloc)
     try{
-        const user = await User.findById(userID)
+        const user = await User.findOne({location : userloc})
         if(!user){
             res.status(404).send("User not Found")
         }else{
@@ -38,8 +39,6 @@ app.get("/feed", async (req,res) => {
     }
 })
 
-
-
 //post user data
 app.post("/signup", async (req,res) => {
     const user = new User(req.body)
@@ -47,6 +46,32 @@ app.post("/signup", async (req,res) => {
     try{
         await user.save()
         res.send("User added Succesfully")
+    }
+    catch(err) {
+        res.status(400).send("Error Faced")
+    }
+})
+
+//delete the user
+app.delete("/user", async (req, res) => {
+    const userId = req.body._id;
+    try{
+        await User.findByIdAndDelete(userId);
+        res.send("Deleted the user succesfully");
+    }
+    catch(err) {
+        res.status(400).send("Error Faced")
+    }
+
+})
+
+//update the data
+app.patch("/user", async (req,res) => {
+    const userId = req.body._id;
+    const data = req.body;
+    try{
+        await User.findByIdAndUpdate(userId, data , {returnDocument:'before'});
+        res.send("Updated the user succesfully");
     }
     catch(err) {
         res.status(400).send("Error Faced")
