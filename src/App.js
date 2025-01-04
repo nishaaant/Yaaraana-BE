@@ -1,11 +1,11 @@
-//importing express and mongoose
 const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user")
-const {validateSignup} = require("./utils/validator")
+const {validateSignup , validateLogin} = require("./utils/validator")
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken");
+const {authUser} = require("./middlewares/auth")
 
 const app = express();
 
@@ -38,6 +38,8 @@ app.post("/login" , async (req, res) => {
     try{
 
         const{emailID , password} = req.body;
+
+        validateLogin(req);
     
         const user = await User.findOne({emailID : emailID})
         if(!user){throw new Error ("Invalid Credentials!! Please re-check email and password")}
@@ -45,7 +47,7 @@ app.post("/login" , async (req, res) => {
         const isPasswordCorrect = await bcrypt.compare(password,user.password)
         if(isPasswordCorrect){
 
-            const token = await jwt.sign({_id : user._id}, "nishant@mahaan");
+            const token = await jwt.sign({_id : user._id}, "nishant@mahaan" , {expiresIn : '7d'});
 
             res.cookie("token",token);
             res.send("Login Succesfull");
@@ -57,25 +59,23 @@ app.post("/login" , async (req, res) => {
 })
 
 //get profile
-app.get("/profile", async (req,res) => {
-
-    try{ const cookies = req.cookies;
-    const {token} = cookies ;
-
-    const decodedMessage = await jwt.verify(token, "nishant@mahaan")
-
-    const{_id} = decodedMessage;
-    const user = await User.findById(_id);
-
-
-    if(!token){
-        throw new Error("Invalid token!")
-    }
-    else{
-        res.send(user)
-    }}
+app.get("/profile",authUser, async (req,res) => {
+try{
+    const user = req.user;
+    res.send(user);
+}
     catch(err) {
         res.status(400).send("ERROR : "+err.message)
+    }
+})
+
+//post Send Connection Request
+app.post("/sendConnectionRequest", authUser , async(req, res) => {
+
+    try{const user = req.user;
+    res.send("connection request is sent by - " + user.firstName)}
+    catch(err){
+        throw new Error("ERROR : " + err.message)
     }
 })
 
