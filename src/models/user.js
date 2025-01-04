@@ -1,6 +1,8 @@
 const mongoose = require("mongoose")
 var validator = require('validator');
 const { default: isEmail } = require("validator/lib/isEmail");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt")
 
 //created schema
 const userSchema = new mongoose.Schema({
@@ -78,6 +80,28 @@ const userSchema = new mongoose.Schema({
 {timestamps : true}
 )
 
+//user Schema Methods
+
+//login jwt token 
+
+userSchema.methods.getJWT = async function () {
+    const user = this;
+    
+    const token = await jwt.sign({_id : user._id}, "nishant@mahaan" , {expiresIn : '7d'});
+
+    return token;
+}
+
+//login password validation
+
+userSchema.methods.validatePassword = async function(passwordEnteredByUser) {
+    const passwordHash = this.password;
+
+    const isPasswordCorrect = await bcrypt.compare(passwordEnteredByUser,passwordHash)
+
+    return isPasswordCorrect;
+}
+
 
 //exported schema via User Model
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema );
