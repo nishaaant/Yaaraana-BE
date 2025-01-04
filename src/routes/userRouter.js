@@ -4,7 +4,7 @@ const User = require("../models/user")
 const userRouter = express.Router();
 
 //get all the users
-userRouter.get("/feed", async (req,res) => {
+userRouter.get("/user/feed", async (req,res) => {
     try{
         const users = await User.find({})
         if(users.length == 0){

@@ -32,6 +32,16 @@ const validateLogin = (req) => {
     }
 }
 
+const validateEditData = (req) => {
+
+    const allowedUpdates = ["firstName","middleName","lastName","age","gender","location","about","photo","skills"];
+
+    const isUpdateAllowed = Object.keys(req.body).every((key) => allowedUpdates.includes(key))
+    
+    return isUpdateAllowed;
+    
+}
+
 module.exports = {
-    validateSignup, validateLogin
+    validateSignup, validateLogin, validateEditData
 }

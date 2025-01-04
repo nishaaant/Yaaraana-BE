@@ -18,14 +18,14 @@ Created the app named "Yaarana" .. This is the Backend microservice repository f
 ## Listing APIS
 
 ### authRoutes
-- POST /signup
-- POST /login
-- POST /logout
+- POST /signup ✅
+- POST /login ✅
+- POST /logout ✅
 
 ### profileRoutes
-- GET /profile/view
-- PATCH /profile/edit
-- PATCH /profile/editPassword
+- GET /profile/view ✅
+- PATCH /profile/edit ✅
+- PATCH /profile/editPassword ✅
 
 ### requestRoutes
 - POST /request/send/interested/:userId
