@@ -38,11 +38,41 @@ requestRouter.post("/request/send/:status/:userId", authUser , async(req, res) =
             message : req.user.firstName +" "+ statusData +" "+ toUser.firstName,
             data : data
         })
-
-
     }
     catch(err){
         res.status(400).send("ERROR " + err.message)
+    }
+})
+
+//post Recieved Connection Requests
+requestRouter.post("/request/review/:status/:requestId" , authUser , async (req, res) => {
+
+    try{
+
+        const loggedInUser = req.user ;
+        const {status , requestId} = req.params ;
+
+        const statusAllowed = ["accepted" , "rejected"];
+
+        if(!statusAllowed.includes(status)){return res.json({message : "Status not Allowed"})};
+
+        const currentRequest = await Connection.findOne({
+            _id : requestId ,
+            toUserId : loggedInUser._id, 
+            status : "like"
+        })
+        if(!currentRequest){return res.json({message : "Connection Request not Valid!"})};
+
+        currentRequest.status = status ;
+        const data = await currentRequest.save();
+
+        res.json({
+            message : "Request " + status + " succesfully" , data
+        })
+
+
+    }catch(err){
+        res.status(400).send("ERROR: " + err.message)
     }
 })
 
