@@ -48,11 +48,9 @@ const userSchema = new mongoose.Schema({
     },
     gender : {
         type : String,
-        validate(value){
-            if(!["Male","Female","Others"].includes(value))
-            {
-                throw new Error("Gender can be Male , Female and Others only")
-            }
+        enum : {
+            values : ["Male","Female","Others"],
+            message : `Gender can only be Male, Female or Others`
         }
     },
     location : {
