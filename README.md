@@ -28,8 +28,7 @@ Created the app named "Yaarana" .. This is the Backend microservice repository f
 - PATCH /profile/editPassword ✅
 
 ### requestRoutes
-- POST /request/send/interested/:userId
-- POST /request/send/ignored/:userId
+- POST /request/send/:status/:userId  ~ status {like,ignore} ✅
 - POST /request/review/accepted/:requestId
 - POST /request/review/rejected/:requestId
 
