@@ -29,7 +29,7 @@ Created the app named "Yaarana" .. This is the Backend microservice repository f
 
 ### requestRoutes
 - POST /request/send/:status/:userId  ~ status {like,ignore} ✅
-- POST /request/review/:status/:requestId ~ status {accepted , rejected}
+- POST /request/review/:status/:requestId ~ status {accepted , rejected}✅
 
 ### userRoutes
 - GET /user/connections
