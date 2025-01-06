@@ -32,6 +32,6 @@ Created the app named "Yaarana" .. This is the Backend microservice repository f
 - POST /request/review/:status/:requestId ~ status {accepted , rejected}✅
 
 ### userRoutes
-- GET /user/connections
-- GET /user/requests
+- GET /user/requests/received ✅
+- GET /user/connections✅
 - GET /user/feed

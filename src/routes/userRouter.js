@@ -65,15 +65,35 @@ userRouter.get("/user/connections" , authUser , async (req, res) => {
 
 })
 
-//get all the users
-userRouter.get("/user/feed", async (req,res) => {
+//get feed for the user
+userRouter.get("/feed",authUser , async (req,res) => {
     try{
-        const users = await User.find({})
-        if(users.length == 0){
-            res.status(404).send("No Data")
-        }else{
-            res.send(users)
-        }
+        
+        const loggedInUser = req.user ;
+
+        const dataToHide = await Connection.find({
+            $or : [{
+                fromUserId : loggedInUser._id
+            },{
+                toUserId : loggedInUser._id
+            }]
+        }).select("fromUserId toUserId")
+
+        const hideUserId = new Set();
+
+        dataToHide.forEach((requests) => {
+            hideUserId.add(requests.fromUserId.toString()),
+            hideUserId.add(requests.toUserId.toString())
+        })
+
+        const users = await User.find({
+            $and :  [
+                {_id :{ $nin : Array.from(hideUserId)}},
+                {_id : {$ne : loggedInUser._id}}]
+            }).select(USER_SAFE_DATA)
+
+ 
+        res.send(users);
     }
     catch(err) {
         res.status(400).send("ERROR : "+err.message)
