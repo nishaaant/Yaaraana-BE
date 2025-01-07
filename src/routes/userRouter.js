@@ -5,7 +5,7 @@ const Connection = require("../models/connectionRequest")
 
 const userRouter = express.Router();
 
-const USER_SAFE_DATA = "firstName lastName photo about skills location";
+const USER_SAFE_DATA = "firstName lastName photo about skills location age gender";
 
 
 //get all the requests

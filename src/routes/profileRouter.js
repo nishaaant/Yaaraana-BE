@@ -22,16 +22,19 @@ profileRouter.patch("/profile/edit", authUser, async (req,res) => {
     try{
         const isUpdateAllowed = validateEditData(req)
         if(!isUpdateAllowed){throw new Error("Updating this data not Allowed")}
-        const user = req.user;
-        const loggedInUserId = user._id;
-        const data = req.body;
-        
-        await User.findByIdAndUpdate(loggedInUserId , data , {returnDocument:'before',runValidators:true});
-        res.send("Updated the user succesfully");
-    }
-    catch(err) {
-        res.status(400).send("ERROR : "+ err.message)
-    }
+        const loggedInUser = req.user;
+
+    Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
+
+    await loggedInUser.save();
+
+    res.json({
+      message: `${loggedInUser.firstName}, your profile updated successfuly`,
+      data: loggedInUser,
+    });
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
+  }
 })
 
 //update the password
