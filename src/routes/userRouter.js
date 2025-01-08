@@ -19,11 +19,10 @@ userRouter.get("/user/requests/received" , authUser , async (req, res) => {
             status : "like"
         }).populate("fromUserId" , USER_SAFE_DATA)
 
-        if(requestsInReview.length == 0){return res.json({message : "No requests yet !"})};
 
         res.json({
             message : "Requests fetched succesfully" , 
-            data : requestsInReview
+            data : requestsInReview,
     })}
     catch (err) {
         res.status(400).send("ERROR : " + err.message)
@@ -46,7 +45,6 @@ userRouter.get("/user/connections" , authUser , async (req, res) => {
             status : "accepted"
         }).populate("fromUserId" , USER_SAFE_DATA).populate("toUserId" , USER_SAFE_DATA)
 
-        if(connections.length == 0){return res.json({message : "no connections available!"})}
 
         const data = connections.map((row) => {
             if (row.fromUserId._id.toString()==loggedInUser._id){return row.toUserId}
