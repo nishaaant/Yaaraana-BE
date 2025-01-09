@@ -7,12 +7,13 @@ const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken");
 const {authUser} = require("./middlewares/auth")
 const cors = require("cors")
+require("dotenv").config();
 
 const app = express();
 
 app.use(
     cors({
-      origin: "https://yaaraana-nish.vercel.app",
+      origin: process.env.WEB_URL,
       credentials: true,
     })
   );

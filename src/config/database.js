@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const connectDB = async() => {
     await(
-        mongoose.connect(
-            "mongodb+srv://learnnode-username:learnmongodb1@learnnode-cluster.jpymb.mongodb.net/Yaaraana/?retryWrites=true"
-            )
+        mongoose.connect(process.env.MONGO_URL)
     )
 }
 module.exports = connectDB;
