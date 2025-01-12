@@ -22,7 +22,10 @@ authRouter.post("/signup", async (req,res) => {
 
             const token = await newUser.getJWT();
 
-            res.cookie("token",token);
+            res.cookie("token",token , {
+                httpOnly: true,
+                secure: true,
+            });
 
         res.json({
             message : "New User Added Succesfully!",
@@ -53,7 +56,10 @@ authRouter.post("/login" , async (req, res) => {
 
             const token = await user.getJWT();
 
-            res.cookie("token",token);
+            res.cookie("token",token , {
+                httpOnly: true,
+                secure: true,
+            });
             res.send(user);
         }else{throw new Error ("Invalid Credentials!! Please re-check email and password")}
     }
