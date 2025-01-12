@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
     cors({
-      origin: "https://yaaraana-nish.vercel.app",
+      origin: process.env.WEB_URL,
       credentials: true,
     })
   );
