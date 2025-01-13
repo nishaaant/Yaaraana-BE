@@ -66,38 +66,35 @@ userRouter.get("/feed",authUser , async (req,res) => {
         const loggedInUser = req.user ;
         
         const page = parseInt(req.query.page) || 1 ;
-        let limit = parseInt(req.query.limit) || 10 ;
+        let limit = parseInt(req.query.limit) || 50 ;
         limit = limit>50 ? 50 : limit ;
         const skip = (page - 1)*limit ;
 
 
 
         const dataToHide = await Connection.find({
-            $or : [{
-                fromUserId : loggedInUser._id
-            },{
-                toUserId : loggedInUser._id
-            }]
-        }).select("fromUserId toUserId")
+            $or : [{fromUserId: loggedInUser._id.toString()},{toUserId: loggedInUser._id.toString()
+            }],
+        }).select("fromUserId toUserId");
 
+        
         const hideUserId = new Set();
-
         dataToHide.forEach((requests) => {
-            hideUserId.add(requests.fromUserId.toString()),
-            hideUserId.add(requests.toUserId.toString())
+            hideUserId.add(requests.fromUserId.toString());
+            hideUserId.add(requests.toUserId.toString());
         })
 
         const users = await User.find({
             $and :  [
-                {_id :{ $nin : Array.from(hideUserId)}},
-                {_id : {$ne : loggedInUser._id}}]
+                { _id : { $nin: Array.from(hideUserId)}},
+                { _id : { $ne : loggedInUser._id.toString()}},]
             })
             .select(USER_SAFE_DATA)
             .skip(skip)
             .limit(limit)
 
  
-        res.send(users);
+            res.json({ data: users });
     }
     catch(err) {
         res.status(400).send("ERROR : "+err.message)
