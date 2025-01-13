@@ -1,6 +1,5 @@
 const mongoose = require("mongoose")
 var validator = require('validator');
-const { default: isEmail } = require("validator/lib/isEmail");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
 require("dotenv").config();
@@ -86,7 +85,7 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.getJWT = async function () {
     const user = this;
     
-    const token = await jwt.sign({_id : user._id}, process.env.JWT_TOKEN , {expiresIn : '7d'});
+    const token = await jwt.sign({_id : user._id}, process.env.JWT_TOKEN , {expiresIn : "7d"});
 
     return token;
 }

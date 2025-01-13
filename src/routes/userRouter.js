@@ -47,14 +47,11 @@ userRouter.get("/user/connections" , authUser , async (req, res) => {
 
 
         const data = connections.map((row) => {
-            if (row.fromUserId._id.toString()==loggedInUser._id){return row.toUserId}
+            if (row.fromUserId._id.toString()==loggedInUser._id.toString()){return row.toUserId}
             return row.fromUserId
         })
 
-        res.json({
-            message : "connections fetched succesfully" ,
-            data : data
-        })
+        res.json({ data : data });
 
 
     }catch(err) {
@@ -66,14 +63,14 @@ userRouter.get("/user/connections" , authUser , async (req, res) => {
 //get feed for the user
 userRouter.get("/feed",authUser , async (req,res) => {
     try{
+        const loggedInUser = req.user ;
         
-        const page = req.query.page || 1 ;
-        let limit = req.query.limit || 10 ;
+        const page = parseInt(req.query.page) || 1 ;
+        let limit = parseInt(req.query.limit) || 10 ;
         limit = limit>50 ? 50 : limit ;
         const skip = (page - 1)*limit ;
 
 
-        const loggedInUser = req.user ;
 
         const dataToHide = await Connection.find({
             $or : [{
